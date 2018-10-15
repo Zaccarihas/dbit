@@ -60,29 +60,29 @@ function lastStatment ($acc){
 
 function recAgrTot ($acc,$start,$end){
     
-    echo "<br/><hr/>recAgrTot för: ".$acc;
+    //echo "<br/><hr/>recAgrTot för: ".$acc;
     
     $stat = lastStatment($acc);
     
-    echo "<br/>Bekräftat saldo: ".$stat["AccStat"];
+    //echo "<br/>Bekräftat saldo: ".$stat["AccStat"];
     
-    $trnTot = transTot($acc,$start,$end);
+    $trnTot = transTot($acc,$stat["AccStated"],$end);
     
-    echo "<br/>Transtot: ".$trnTot;
+    //echo "<br/>Transtot: ".$trnTot;
    
     $agrTot = $stat["AccStat"] + $trnTot;
     
-    echo "<br/>Initial AgrTot: ".$agrTot;
+    //echo "<br/>Initial AgrTot: ".$agrTot;
     
     $subAccs = getAccounts($acc);
     
-    echo"<br/>Subs: "; print_r($subAccs);
+    //echo"<br/>Subs: "; print_r($subAccs);
     
     foreach($subAccs as $sub){
         $agrTot += recAgrTot($sub['AccountID'],$start,$end);
     }
     
-    echo "<br/>AgrTot att returnera för ".$acc.": ".$agrTot."<br/><br/><hr/>";
+    //echo "<br/>AgrTot att returnera för ".$acc.": ".$agrTot."<br/><br/><hr/>";
     
     return $agrTot;
     
@@ -118,7 +118,7 @@ function agrTot ($acc = null,$startDate = null,$endDate = null){
    
  
    
-   $activeAccountID =9;
+   $activeAccountID = 10;
    $currentTime = timestamp();
    $accounts = array();
    
@@ -131,7 +131,7 @@ function agrTot ($acc = null,$startDate = null,$endDate = null){
    echo "<h1>Welcome</h1>";
    echo "<div>Hello! The database is now open for business.</div>";
    
-   echo "<br/>Konto: ".$activeAccountID." ".$activeAccount[0]["AccBDC"]." - ".$activeAccount[0]["AccName"];
+   /*echo "<br/>Konto: ".$activeAccountID." ".$activeAccount[0]["AccBDC"]." - ".$activeAccount[0]["AccName"];
    
    $stats = lastStatment($activeAccountID);
    
@@ -149,7 +149,7 @@ function agrTot ($acc = null,$startDate = null,$endDate = null){
    
    echo "<br/>Aggregerat kontosaldo (inkludera kontosaldo från underställda konton): ".agrTot($activeAccountID,$stats["AccStated"],$currentTime);
    
-   echo "<br/><br/>UNDERKONTON<hr/>";
+   echo "<br/><br/>UNDERKONTON<hr/>";*/
    
    // Get the subaccount information
    
@@ -167,7 +167,7 @@ function agrTot ($acc = null,$startDate = null,$endDate = null){
        $accInfo["Name"] = $acc['AccName'];
        $accInfo["Stated"] = $stats["AccStated"];
        $accInfo["Status"] = $stats["AccStat"];
-       $accInfo["Trans"] = transTot($acc["AccountID"],$stats["AccStated"],$currentTime);
+       $accInfo["Trans"] = transTot($acc["AccountID"],$accInfo["Stated"],$currentTime);
        $accInfo["Total"] = $accInfo["Trans"] + $accInfo["Status"];
        $accInfo["AgrTot"] = agrTot($acc["AccountID"],$accInfo["Stated"],$currentTime);
        
