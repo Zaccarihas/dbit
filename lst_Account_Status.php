@@ -60,29 +60,15 @@ function lastStatment ($acc){
 
 function recAgrTot ($acc,$start,$end){
     
-    //echo "<br/><hr/>recAgrTot för: ".$acc;
-    
     $stat = lastStatment($acc);
-    
-    //echo "<br/>Bekräftat saldo: ".$stat["AccStat"];
-    
     $trnTot = transTot($acc,$stat["AccStated"],$end);
-    
-    //echo "<br/>Transtot: ".$trnTot;
-   
     $agrTot = $stat["AccStat"] + $trnTot;
     
-    //echo "<br/>Initial AgrTot: ".$agrTot;
-    
     $subAccs = getAccounts($acc);
-    
-    //echo"<br/>Subs: "; print_r($subAccs);
     
     foreach($subAccs as $sub){
         $agrTot += recAgrTot($sub['AccountID'],$start,$end);
     }
-    
-    //echo "<br/>AgrTot att returnera för ".$acc.": ".$agrTot."<br/><br/><hr/>";
     
     return $agrTot;
     
