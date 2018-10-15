@@ -21,5 +21,14 @@
 	
 	}
 	
+	function databasequery($db,$qstr,$param=array(),$all = true){
+	    
+	    $qry = $db->prepare($qstr);
+	    $qry->execute($param);
+	    
+	    return ($all?$qry->fetchAll():$qry->fetchColumn());
+	    
+	}
+	
 
 ?>
