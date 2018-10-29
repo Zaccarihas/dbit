@@ -8,16 +8,18 @@
 
     // Handle submitted form
 
+    
     if(isset($_POST['btnSubmit'])){
     
     
-        $qrystr  = "INSERT INTO tbl_statements (Date,Account,Amount,Note) ";
+        $qrystr  = "INSERT INTO tbl_statements_tst (Date,Account,Amount,Note) ";
         $qrystr .= "VALUES(?,?,?,?)";
     
         $qry = $db->prepare($qrystr);
         $qry->execute(array($_POST['fldDate'],$_POST['fldAccount'],$_POST['fldAmount'],$_POST['fldNote']));
     
     }
+    
 
 
 
@@ -28,71 +30,72 @@
 <html>
 	<head>
 		<TITLE>Inmatningsformulär - Account</TITLE>
+		
+		<link href="resources/stylesheets/dbit_statements.css" rel="stylesheet" type="text/css">
 	
 	</head>
-	<BODY>
+	<BODY Class="dbitpage">
 
-		<FORM Method="post">
+		<FORM Id="frmNewStat" Method="post">
 		
 			<DIV>New</DIV>
 			
-			<!-- Date field -->
-			<DIV><DIV>Datum</DIV><DIV>
-			
-			    <?php 
-			    
-			        echo "<INPUT Id='fldDate' Name='fldDate' Size='19' Type='text' Value='".timestamp()."'/>";
-			    
-			    ?>			    			    
-			    
-			</DIV></DIV>			
-			
 			<!-- Account field -->
-			<DIV><DIV>Konto</DIV><DIV>
+			<DIV Id="fldblkAccount">
 			
-			    <SELECT Id="fldAccount" Name="fldAccount" Size="5">
+				<LABEL Id="lblAccount" For="fldAccount">Konto</LABEL>
+				<SELECT Id="fldAccount" Name="fldAccount" Size="3">
 			    
-			    	<?php 
+			        <?php 
 			    	
 			    	    // Fetch all accounts ordered by BDC
-			    	    
 			    	    $qrystr  = "SELECT AccountID,AccBDC,AccName FROM tbl_Accounts ORDER BY AccBDC";
+		    	        $qry = $db->prepare($qrystr);
+		    	        $qry->execute();
+		    	        $result = $qry->fetchAll(PDO::FETCH_ASSOC);
 			    	    
-			    	    $qry = $db->prepare($qrystr);
-			    	    $qry->execute();
+		    	        // List each account as an option with the AccountID as value and BDC - AccountName as text
 			    	    
-			    	    $result = $qry->fetchAll(PDO::FETCH_ASSOC);
-			    	    
-			    	   // List each account as an option with the AccountID as value and BDC - AccountName as text
-			    	    
-			    	    foreach($result as $acc){
-			    	        
-			    	        echo "<OPTION Id='fldAccount' Value='".$add['AccountID']."'>".$acc['AccBDC']." - ".$acc['AccName']."</OPTION>";
+		    	        foreach($result as $acc){
+                            echo "<OPTION Id='fldAccount' Value='".$add['AccountID']."'>".$acc['AccBDC']." - ".$acc['AccName']."</OPTION>";
 			    	    }
-			    	
-					
+			    	 		
 					?>
 					
 				</SELECT>
 			
-			</DIV></DIV>
+			</DIV>
 			
-			<!-- Amount field -->
-			<DIV><DIV>Belopp</DIV><DIV>
+			<!-- The center panel of fields -->   
+			<DIV Id="pnlCenter"> 
 			
-			    <INPUT Id="fldAmount" Name="fldAmount" Size="20" Type="text"/>
+			    <!-- Date field -->
+			    <DIV Id="fldblkDate">
 			    
-			</DIV></DIV>
+			         <LABEL Id="lblDate" For="fldDate">Datum</LABEL>
+			         <?php echo "<INPUT Id='fldDate' Name='fldDate' Size='19' Type='text' Value='".timestamp()."'/>"; ?>			    			    
+			    
+			    </DIV>			
+				
+			    <!-- Amount field -->
+			    <DIV Id="fldblkAmount">
 			
-			
- 			<!--  Note field -->
- 			<DIV><DIV>Notering</DIV><DIV>
+				    <LABEL Id="lblAmount" For="fldAmount">Belopp</LABEL>
+			        <INPUT Id="fldAmount" Name="fldAmount" Size="19" Type="text"/>
+			    
+			    </DIV>
+			    
+			</DIV> <!-- End of panel -->
+			    
+			    
+			<!--  Note field -->
+ 			<DIV Id="fldblkNote">
  			
- 				<TEXTAREA Id="fldNote" Name="fldNote" rows="3" cols="80" style="resize: none"></TEXTAREA>
+ 			    <LABEL Id="lblNote" For="fldNote">Notering</LABEL>
+ 				<TEXTAREA Id="fldNote" Name="fldNote" rows="2" cols="30" style="resize: none"></TEXTAREA>
  				
- 			</DIV></DIV>
-			
-			
+ 			</DIV>
+ 
 			<!--  Submit button -->
 			<DIV><button Name="btnSubmit" Id="btnSubmit">Submit</button></DIV>
 			

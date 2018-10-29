@@ -1,0 +1,34 @@
+
+
+.dbitpage {
+}
+
+#pnlCenter {
+	display:			inline-block;
+	vertical-align:		top;
+}
+
+LABEL {
+	display:			block;
+	font-family:		Helvetica;
+	font-size:			0.7em;
+}
+
+#fldblkAccount {
+	display:			inline-block;
+	padding:			2px;
+}
+
+#fldblkNote {
+	vertical-align:		top;
+	display:			inline-block;
+	padding:			2px;
+}
+
+
+	
+	
+						
+	
+
+	
