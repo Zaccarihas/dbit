@@ -1,10 +1,9 @@
 <?php 
 
 require_once 'resources/fnc_database.php';
+require_once 'resources/fnc_general.php';
 
 $db = databaseconnect("lofqvist.dynu.net","dev","Av4rak1n","dbit");
-
-print_r($_POST);
 
 // Handle submitted form
 
@@ -50,8 +49,6 @@ if(isset($_POST['btnSubmit'])){
     
 }
 
-$db = null;
-
 
 ?>
 
@@ -65,13 +62,38 @@ $db = null;
 
 		<FORM Method="post">
 		
-			<DIV>New</DIV>
-			<DIV><DIV>Date</DIV><DIV><INPUT Id="fldDate" Name="fldDate" Size="10" Type="text"/></DIV></DIV>
+<?php 
+    
+    // Occasion identification field
+    echo "</DIV>New</DIV>";
+
+    // Date field
+    echo "<DIV><DIV>Date</DIV><DIV><INPUT Id='fldDate' Name='fldDate' Size='20' Type='text' Value='".timestamp()."'/></DIV></DIV>"
+
+    
+?>
+			
 			<DIV><DIV>Description</DIV><DIV><INPUT Id="fldDesc" Name="fldDesc" Size="80" Type="text"/></DIV></DIV>
 			<DIV>
 				<DIV>Counterpart</DIV>
 				<DIV>
 					<SELECT Id="fldCPart" Name="fldCPart" Size="5">
+					
+<?php 
+    // Fetch the counterpart options from the database
+    
+    $qrystr  = "SELECT ParticipantID, PartName, PartLocation FROM tbl_counterparts";
+    $qry = $db->prepare($qrystr);
+    $qry->execute();
+    $result = $qry->fetchAll(PDO::FETCH_ASSOC);
+    
+    foreach($result as $counterpart){
+        echo "<OPTION Value = '".$counterpart["ParticipantID"]."'>".$counterpart["PartName"].", ".$counterpart["PartLocation"]."</OPTION>";
+    }
+    
+    
+
+?>
 						<OPTION Id="fldPartOpt_1" Value="61">Coop Konsum, Hörnett</OPTION>
 						<OPTION Id="fldPartOpt_2" Value="189">OKQ8 Rondellen, Örnsköldsvik</OPTION>
 					</SELECT>				
@@ -83,3 +105,9 @@ $db = null;
 
     </BODY>
 </HTML>
+
+<?php 
+
+    $db = null;
+
+?>

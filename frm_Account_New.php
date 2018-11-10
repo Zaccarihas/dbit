@@ -44,13 +44,13 @@
 						<OPTION Id="fldPartOpt_1" Value="EUR">EUR Euro</OPTION>
 						<OPTION Id="fldPartOpt_2" Value="USD">USD Amerikanska dollar</OPTION>
 					</SELECT>
-			</DIV>
+			</DIV></DIV>
 			<DIV><DIV>Typ</DIV><DIV>
 			      <INPUT Type="radio" Name="fldType" id="fldType" value="Assett"> Tillgång<BR/>
 			      <INPUT Type="radio" Name="fldType" id="fldType" value="Dividend"> Skuld<BR/>
 			      <INPUT Type="radio" Name="fldType" id="fldType" value="Expense" checked> Utgift<BR/>
 			      <INPUT Type="radio" Name="fldType" id="fldType" value="Income"> Inkomst<BR/>
-			</DIV>
+			</DIV></DIV>
   			<DIV><DIV>Beskrivning</DIV><DIV><TEXTAREA Id="fldDesc" Name="fldDesc" rows="3" cols="80" style="resize: none"></TEXTAREA></DIV></DIV>
 			
 			<DIV><button Name="btnSubmit" Id="btnSubmit">Submit</button></DIV>
