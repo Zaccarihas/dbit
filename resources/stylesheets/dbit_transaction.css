@@ -13,6 +13,15 @@ LABEL {
 	font-size:			0.7em;
 }
 
+H1 {
+	font-family:		Helvetica;
+	font-size:			1.2em;
+	text-color:				blue;
+}
+
+BODY {
+	background:			yellow;
+}
 
 
 	
