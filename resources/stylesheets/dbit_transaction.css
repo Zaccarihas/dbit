@@ -16,12 +16,35 @@ LABEL {
 H1 {
 	font-family:		Helvetica;
 	font-size:			1.2em;
-	text-color:				blue;
+	color:				blue;
 }
 
-BODY {
-	background:			yellow;
+.EntRow DIV {
+	display:			inline-block;
+	padding:			3pt;
 }
+
+.EntDesc {
+	width:				200pt;
+}
+
+.EntAcc {
+	width:				150pt;
+}
+
+.EntAmount {
+	width:				100pt;
+	text-align:			right;
+}
+
+.EntQty {
+	width:				80pt;
+}
+
+.EntObj {
+	width:				120pt;
+}
+
 
 
 	
