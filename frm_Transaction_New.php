@@ -31,7 +31,7 @@ if(isset($_POST['btnAdd'])){
     
     $qrystr  = "INSERT INTO tmp_ents (EntDesc,EntAmount,EntAcc,EntQty,EntUnit,EntObj) ";
     $qrystr .= "VALUES(?,?,?,?,?,?)";
-    
+
     $qry = $db->prepare($qrystr);
     $qry->execute(array($_POST['fldEntDesc'],$_POST['fldEntAmount'],$_POST['fldEntAcc'],$_POST['fldEntQty'],$_POST['fldEntUnit'],$_POST['fldEntObj']));
     
@@ -52,8 +52,8 @@ if(isset($_POST['btnSubmit'])){
         
         // Transfer the transaction info from the temporary table to the permanent table
         
-        // $trnTab = "tst_trans"; $entTab = "tst_entries"; // The test tables
-        $trnTab = "tbl_transactions"; $entTab = "tab_entries"; // The live tables       
+        //$trnTab = "tst_trans"; $entTab = "tst_entries"; // The test tables
+        $trnTab = "tbl_transactions"; $entTab = "tbl_entries"; // The live tables       
         
         $qrystr  = "INSERT INTO ".$trnTab."(TrnDesc, TrnDate, TrnCPart, TrnNote) ";
         $qrystr .= "SELECT TrnDesc,TrnDate,TrnCPart,TrnNote FROM tmp_trn";
