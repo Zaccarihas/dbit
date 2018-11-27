@@ -8,7 +8,7 @@ $db = databaseconnect("lofqvist.dynu.net","dev","Av4rak1n","dbit");
 // Handle submitted form
 
 if(isset($_POST['btnAdd'])){
-    
+ 
     // Create temporary table
     
     $qrystr  = "CREATE TABLE IF NOT EXISTS tmp_ents (";
@@ -16,24 +16,47 @@ if(isset($_POST['btnAdd'])){
     $qrystr .= "EntDesc VARCHAR(64),";                            
     $qrystr .= "EntAmount DECIMAL(10,2),";
     $qrystr .= "EntAcc BIGINT UNSIGNED,";
-    $qrystr .= "EntQty FLOAT,";
-    $qrystr .= "EntUnit ENUM('st','frp','l','kg','par','tim'),";
-    $qrystr .= "EntObj BIGINT UNSIGNED,";
+    $qrystr .= "EntQty FLOAT DEFAULT NULL,";
+    $qrystr .= "EntUnit ENUM('st','frp','l','kg','par','tim') DEFAULT NULL,";
+    $qrystr .= "EntObj BIGINT UNSIGNED DEFAULT NULL,";
     $qrystr .= "PRIMARY KEY (EntID))";
     
     $qry = $db->prepare($qrystr);
     $qry->execute();
-
+       
     // Här ska jag fortsätta att lägga in uppdatering av tabellen men hur gör jag en temporär tabell.
     // Det kommer ju bli problem om jag bara gör en egen temporärtabell ifall flera användare är inne samtidigt
     
+    $entvalues = array();
+    $entvalues[] = $_POST['fldEntDesc'];
+    $entvalues[] = str_replace(",",".",$_POST['fldEntAmount']);
+    $entvalues[] = $_POST['fldEntAcc'];
+    
+    // Check if the account is an Assett or a Liability
+    $qrystr  = "SELECT AccType FROM tbl_accounts WHERE AccountID = ?";
+    $qry = $db->prepare($qrystr);
+    $qry->execute(array($_POST["fldEntAcc"]));
+    $accType = $qry->fetchColumn();
+    
+    echo $accType."<br/>";
+    
+    if($accType != 'Assett'){
+        $entvalues[] = $_POST['fldEntQty'];
+        $entvalues[] = $_POST['fldEntUnit'];
+        $entvalues[] = $_POST['fldEntObj'];
+    }
+    
+     print_r($entvalues); echo("<br/>");
+    
     // Put data into the temporary table
     
-    $qrystr  = "INSERT INTO tmp_ents (EntDesc,EntAmount,EntAcc,EntQty,EntUnit,EntObj) ";
-    $qrystr .= "VALUES(?,?,?,?,?,?)";
-
+    $qrystr  = "INSERT INTO tmp_ents (EntDesc,EntAmount,EntAcc".($accType != 'Assett'?",EntQty,EntUnit,EntObj":"").") ";
+    $qrystr .= "VALUES(?,?,?".($accType != 'Assett'?",?,?,?":"").")";
+    
+    echo "<br/>".$qrystr."<br/>";
+    
     $qry = $db->prepare($qrystr);
-    $qry->execute(array($_POST['fldEntDesc'],$_POST['fldEntAmount'],$_POST['fldEntAcc'],$_POST['fldEntQty'],$_POST['fldEntUnit'],$_POST['fldEntObj']));
+    $qry->execute($entvalues);
     
     
     
@@ -41,7 +64,7 @@ if(isset($_POST['btnAdd'])){
 
 if(isset($_POST['btnSubmit'])){
     
-    
+   
     // Is there a temporary registered transaction
     
     $qry = $db->prepare("SHOW TABLES LIKE '%tmp_trn%'");
@@ -49,6 +72,8 @@ if(isset($_POST['btnSubmit'])){
     $res = $qry->fetch(PDO::FETCH_NUM);
     
     if(isset($res[0])){ 
+        
+       
         
         // Transfer the transaction info from the temporary table to the permanent table
         
@@ -81,12 +106,17 @@ if(isset($_POST['btnSubmit'])){
         $qrystr  = "DROP TABLE tmp_ents; DROP TABLE tmp_trn;";
         
         $qry = $db->prepare($qrystr);
-        $qry->execute();  
+        $qry->execute(); 
+        
+         
 
     }
     
     else {
         
+           
+        
+         
          // Create temporary table
          
          $qrystr  = "CREATE TABLE tmp_trn (";
@@ -94,21 +124,32 @@ if(isset($_POST['btnSubmit'])){
          $qrystr .= "TrnDesc VARCHAR(64),";
          $qrystr .= "TrnDate DATETIME,";
          $qrystr .= "TrnCPart BIGINT UNSIGNED,";
-         $qrystr .= "TrnNote VARCHAR(64),";
+         $qrystr .= "TrnNote VARCHAR(64) DEFAULT NULL,";
          $qrystr .= "PRIMARY KEY (TrnID))";
          
          $qry = $db->prepare($qrystr);
          $qry->execute();
          
+         
+         
          // Put data into the temporary table
          
-         $qrystr  = "INSERT INTO tmp_trn (TrnDesc,TrnDate,TrnCPart,TrnNote) ";
-         $qrystr .= "VALUES(?,?,?,?)";
+         $qrystr  = "INSERT INTO tmp_trn (TrnDesc,TrnDate,TrnCPart".($_POST['fldTrnNote']==""?"":",TrnNote").") ";
+         $qrystr .= "VALUES(?,?,?".($_POST['fldTrnNote']==""?"":",?").")";
          
          $qry = $db->prepare($qrystr);
-         $qry->execute(array($_POST['fldTrnDesc'],$_POST['fldTrnDate'],$_POST['fldTrnCPart'],$_POST['fldTrnNote']));
+         
+         $inArg = array($_POST['fldTrnDesc'],$_POST['fldTrnDate'],$_POST['fldTrnCPart']);
+         if($_POST['fldTrnNote']!=''){ $inArg[] = $_POST['fldTrnNote']; }
+         $qry->execute($inArg);
+         
+        
+         
+         
                  
     }
+    
+    
      
 }
 
