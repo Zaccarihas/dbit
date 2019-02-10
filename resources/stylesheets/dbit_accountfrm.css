@@ -1,0 +1,50 @@
+BODY {
+	font-family:	Helvetica,Arial,Sans-serif;
+}
+
+H1 {
+	font-size:		24pt;
+	color:			lightgreen;
+	text-shadow: 	2px 2px 5px green;
+}
+
+LABEL {
+	font-size:		0.8em;
+}
+	
+.dbit_panel {
+	background: 	lightgreen;
+	width:			80%;
+	min-width:		500px;
+	margin:			30px 10%; 			/* The outer margin distancing the panel on the page */
+	padding:		20px;				/* Inner padding - distancing the content on the panel from the edges */
+	border:			ridge grey 6px;
+	
+	
+}
+
+.dbit_panelcontent {
+	background: 	lightgrey;
+	min-width:		50%;
+	margin:			0 50px 0 50px;		/* The left-margin distancing the content frame from the panel frame */
+	padding:		10px;
+	border:			solid black 2px;
+	
+	
+}
+
+.dbit_field {
+	display:		inline-block;
+}
+
+#accfrm_accid {
+	width:			80px;			
+}
+
+#accfrm_accname {
+	width:			600px;
+}
+
+#accfrm_accparent {
+	width:			250px;
+}

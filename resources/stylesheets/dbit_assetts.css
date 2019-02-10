@@ -1,0 +1,97 @@
+/* 
+Sätt upp generella regler för hur belopp och datum ska formateras i en cell 
+(OBS! inte själva cellen eftersom detta då påverkar rubriker)
+*/
+
+.sum {
+	text-align:			right;	
+}
+
+.sum::after {
+	content:	" SEK";
+}
+
+.datetime{
+	font-size:	0.8em;
+}
+
+/* LISTREGLER 
+Här är regler för hur listan ska vara formaterad. Exempelvis kolumnbredder och indrag
+*/)
+
+.assettlist {
+	
+}
+
+
+.assett * {
+	display: inline-block;
+}
+.sub {
+	display:	none;
+	margin:	0 0 0 10px;
+}
+
+
+.assett .assett {
+	display:	block;
+}
+
+.tools {
+	width:		40px;
+}
+
+.bdc {
+	width:		70px;
+}
+
+.name {
+	width:		200px;	
+	
+}
+
+.status {
+	width:		120px;
+}
+
+.stated {
+	width:		160px;
+}
+
+.trans {
+	width:		120px;	
+}
+
+.total {
+	width:		120px;	
+}
+
+
+/* LISTHUVUD
+Här är regler för formateringen av listhuvudet
+*/
+
+#listhead * {
+	display:	inline-block;
+}
+
+#listhead {
+	font-family: helvetica, arial, sans-serif;
+	font-size:	0.75em;
+	background:	lightgreen;
+}
+
+/* VÄRDEN
+Här är regler för specifika värden eller celler
+*/
+.statedvalue::before {
+	content:	"(";
+}
+
+.statedvalue::after {
+	content:	")";
+}
+
+
+
+

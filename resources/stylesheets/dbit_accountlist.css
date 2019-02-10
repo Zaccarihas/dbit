@@ -1,0 +1,46 @@
+#Acclist {
+	border:	1px solid black;
+	
+}
+
+THEAD {
+	background: lightblue
+}
+
+.currency {
+	text-align:	right;
+	width:	120px;
+}
+
+.colID {
+	width:	70px;
+}
+
+.colBDC {
+	width: 	70px;
+}
+
+.colName{
+	width:	150px;
+}
+
+.colStated{
+	width:	150px;
+}
+
+.colStatus{
+	
+}
+
+.colTrans{
+	
+}
+
+.colTotal{
+	
+}
+
+.colAgrTot{
+	
+}
+

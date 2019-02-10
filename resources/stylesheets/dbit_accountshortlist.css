@@ -1,0 +1,49 @@
+BODY {
+	background:	lightgreen;
+}
+
+.account {
+	display:	block;
+}
+
+.field + .account {
+	margin: 10 0 0 0px;
+}
+
+.field {
+	display:	inline-block;
+}
+
+.currency {
+	text-align: right;
+	width:	120px;
+}
+
+.bdc {
+	width:	50px;	
+}
+
+.name {
+	width:	200px;	
+}
+
+.accid {
+	width:	50px;
+	text-align:	center;	
+}
+
+.stated {
+	width:	150px;	
+}
+
+.status {
+	
+}
+
+.trans {
+		
+}
+
+.total {
+	
+}

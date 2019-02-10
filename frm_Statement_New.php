@@ -3,7 +3,8 @@
     require_once 'resources/fnc_database.php';
     require_once 'resources/fnc_general.php';   // Uses Timestamp-function
     
-    $db = databaseconnect("lofqvist.dynu.net","dev","Av4rak1n","dbit");
+    //$db = databaseconnect("lofqvist.dynu.net","dev","Av4rak1n","dbit");
+    $db = databaseconnect("localhost","dev","Av4rak1n","dbit");
 
 
     // Handle submitted form
@@ -12,12 +13,18 @@
     if(isset($_POST['btnSubmit'])){
     
     
-        $qrystr  = "INSERT INTO tbl_statements_tst (Date,Account,Amount,Note) ";
+        $qrystr  = "INSERT INTO tbl_statements (Date,Account,Amount,Note) ";
         $qrystr .= "VALUES(?,?,?,?)";
     
+        $val = array();
+        $val[] = $_POST['fldDate']; $val[] = $_POST['fldAccount']; 
+        $val[] = str_replace(",",".",$_POST['fldAmount']);
+        $val[] = $_POST['fldNote'];
+        
         $qry = $db->prepare($qrystr);
-        $qry->execute(array($_POST['fldDate'],$_POST['fldAccount'],$_POST['fldAmount'],$_POST['fldNote']));
-    
+        $qry->execute($val);
+        
+            
     }
     
 
@@ -57,7 +64,7 @@
 		    	        // List each account as an option with the AccountID as value and BDC - AccountName as text
 			    	    
 		    	        foreach($result as $acc){
-                            echo "<OPTION Id='fldAccount' Value='".$add['AccountID']."'>".$acc['AccBDC']." - ".$acc['AccName']."</OPTION>";
+                            echo "<OPTION Value='".$acc['AccountID']."'>".$acc['AccBDC']." - ".$acc['AccName']."</OPTION>";
 			    	    }
 			    	 		
 					?>

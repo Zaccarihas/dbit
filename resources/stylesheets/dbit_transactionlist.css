@@ -1,0 +1,49 @@
+
+
+.dbitpage {
+}
+
+H1 {
+	font-family:		Helvetica;
+	font-size:			1.4em;
+	color:				darkblue;
+}
+
+H2 {
+	font-family:		Helvetica;
+	font-size:			1.1em;
+	color:				blue;
+}
+
+.lstrow {
+	padding:			4px;
+}
+
+.lstcolDate {
+	display:			inline-block;
+	padding:			0 2 0 2px;
+}
+
+.lstcolDesc {
+	display:			inline-block;
+	padding:			0 2 0 2px;
+}
+
+.lstcolCPart {
+	display:			inline-block;
+	padding:			0 2 0 2px;
+	width:				80px;
+}
+
+.lstcolNote {
+	display:			inline-block;
+	padding:			0 2 0 10px;
+}
+
+
+	
+	
+						
+	
+
+	

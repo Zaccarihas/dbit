@@ -3,7 +3,8 @@
 require_once 'resources/fnc_database.php';
 require_once 'resources/fnc_general.php';
 
-$db = databaseconnect("lofqvist.dynu.net","dev","Av4rak1n","dbit");
+//$db = databaseconnect("lofqvist.dynu.net","dev","Av4rak1n","dbit");
+$db = databaseconnect("localhost","dev","Av4rak1n","dbit");
 
 // Handle submitted form
 
@@ -73,40 +74,50 @@ if(isset($_POST['btnSubmit'])){
     
     if(isset($res[0])){ 
         
-       
-        
-        // Transfer the transaction info from the temporary table to the permanent table
-        
-        //$trnTab = "tst_trans"; $entTab = "tst_entries"; // The test tables
-        $trnTab = "tbl_transactions"; $entTab = "tbl_entries"; // The live tables       
-        
-        $qrystr  = "INSERT INTO ".$trnTab."(TrnDesc, TrnDate, TrnCPart, TrnNote) ";
-        $qrystr .= "SELECT TrnDesc,TrnDate,TrnCPart,TrnNote FROM tmp_trn";
+        // Check if the sum of all entries is in balance
+        $qrystr  = "SELECT SUM(EntAmount) AS ChkAmount FROM tmp_ents";
         $qry = $db->prepare($qrystr);
         $qry->execute();
+        $checkSum = $qry->fetchColumn();
         
-        $qrystr  = "SELECT LAST_INSERT_ID()";
-        $qry = $db->prepare($qrystr);
-        $qry->execute();
-                
-        $newTrnID = $qry->fetch(PDO::FETCH_COLUMN);
+        if($checkSum=='0'){
         
-                
-        // Transfer registered entries from the temporary table to the permanent table
-        
-        $qrystr  = "INSERT INTO ".$entTab."(EntDesc, EntAmount, EntTrans, EntAcc, EntQty, EntUnit, EntObj) ";
-        $qrystr .= "SELECT EntDesc,EntAmount,?,EntAcc,EntQty,EntUnit,EntObj FROM tmp_ents";
-        
-        $qry = $db->prepare($qrystr);
-        $qry->execute(array($newTrnID));
-        
-        
-        // Drop temporary tables.
-        
-        $qrystr  = "DROP TABLE tmp_ents; DROP TABLE tmp_trn;";
-        
-        $qry = $db->prepare($qrystr);
-        $qry->execute(); 
+            // Transfer the transaction info from the temporary table to the permanent table
+            
+            //$trnTab = "tst_trans"; $entTab = "tst_entries"; // The test tables
+            $trnTab = "tbl_transactions"; $entTab = "tbl_entries"; // The live tables       
+            
+            $qrystr  = "INSERT INTO ".$trnTab."(TrnDesc, TrnDate, TrnCPart, TrnNote) ";
+            $qrystr .= "SELECT TrnDesc,TrnDate,TrnCPart,TrnNote FROM tmp_trn";
+            $qry = $db->prepare($qrystr);
+            $qry->execute();
+            
+            $qrystr  = "SELECT LAST_INSERT_ID()";
+            $qry = $db->prepare($qrystr);
+            $qry->execute();
+                    
+            $newTrnID = $qry->fetch(PDO::FETCH_COLUMN);
+            
+                    
+            // Transfer registered entries from the temporary table to the permanent table
+            
+            $qrystr  = "INSERT INTO ".$entTab."(EntDesc, EntAmount, EntTrans, EntAcc, EntQty, EntUnit, EntObj) ";
+            $qrystr .= "SELECT EntDesc,EntAmount,?,EntAcc,EntQty,EntUnit,EntObj FROM tmp_ents";
+            
+            $qry = $db->prepare($qrystr);
+            $qry->execute(array($newTrnID));
+            
+            
+            // Drop temporary tables.
+            
+            $qrystr  = "DROP TABLE tmp_ents; DROP TABLE tmp_trn;";
+            
+            $qry = $db->prepare($qrystr);
+            $qry->execute(); 
+        }
+        else {
+            echo "<BR/>The transaction is not in balanced. Registered difference between entries: ".$checkSum;
+        }
         
          
 
@@ -222,7 +233,7 @@ if(isset($_POST['btnSubmit'])){
 		        // Counterpart
 		        
 		        // Prepare the query depending on if a transaction already is registered or not.
-		        $qrystr  = "SELECT ParticipantID, PartName, PartLocation FROM tbl_counterparts";
+		        $qrystr  = "SELECT ParticipantID, PartName, PartLocation FROM tbl_counterparts ORDER BY PartName ASC";
 		        if($entPhase){ $qrystr .= " WHERE ParticipantID = ?"; }
 		        $qry = $db->prepare($qrystr);
 		        
@@ -293,6 +304,7 @@ if(isset($_POST['btnSubmit'])){
 		        echo "<OPTION Value='kg'>kg</OPTION>";
 		        echo "<OPTION Value='par'>par</OPTION>";
 		        echo "<OPTION Value='tim'>tim</OPTION>";
+		        echo "<OPTION Value='m'>m</OPTION>";
 		        echo "</SELECT></SPAN></DIV>";
 		        
 		        // Accounting Object field

@@ -3,7 +3,8 @@
     require_once 'resources/fnc_database.php';
     
     // Connect to the database
-    $db = databaseconnect('lofqvist.dynu.net','dev','Av4rak1n','dbit');
+    //$db = databaseconnect('lofqvist.dynu.net','dev','Av4rak1n','dbit');
+    $db = databaseconnect('localhost','dev','Av4rak1n','dbit');
     
 ?>
 
